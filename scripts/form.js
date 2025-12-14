@@ -197,7 +197,6 @@ function generatePDF(formData) {
     if (transport === 'eigenvervoer') doc.text('X', PAGE_MARGIN_LEFT + 36, TRANSPORT_Y + 2.5);
     doc.text('Eigen vervoer', PAGE_MARGIN_LEFT + 40, TRANSPORT_Y + 2.5);
 
-
     doc.text('Aantal kilometers', PAGE_MARGIN_LEFT + 80, TRANSPORT_Y + 2.5);
     doc.text(formData.get('kilometers') || '', PAGE_MARGIN_LEFT + 110, TRANSPORT_Y + 2.5);
 
