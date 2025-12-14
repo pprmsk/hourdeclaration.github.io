@@ -187,13 +187,16 @@ function generatePDF(formData) {
 
     const TRANSPORT_Y = BOTTOM_SECTION_Y + 5;
 
+    const transport = formData.get('transport');
+
     doc.rect(PAGE_MARGIN_LEFT, TRANSPORT_Y, CHECKBOX_SIZE, CHECKBOX_SIZE);
-    if (formData.get('bedrijfsauto')) doc.text('X', PAGE_MARGIN_LEFT + 1, TRANSPORT_Y + 2.5);
+    if (transport === 'bedrijfsauto') doc.text('X', PAGE_MARGIN_LEFT + 1, TRANSPORT_Y + 2.5);
     doc.text('Bedrijfsauto', PAGE_MARGIN_LEFT + 5, TRANSPORT_Y + 2.5);
 
     doc.rect(PAGE_MARGIN_LEFT + 35, TRANSPORT_Y, CHECKBOX_SIZE, CHECKBOX_SIZE);
-    if (formData.get('eigenvervoer')) doc.text('X', PAGE_MARGIN_LEFT + 36, TRANSPORT_Y + 2.5);
+    if (transport === 'eigenvervoer') doc.text('X', PAGE_MARGIN_LEFT + 36, TRANSPORT_Y + 2.5);
     doc.text('Eigen vervoer', PAGE_MARGIN_LEFT + 40, TRANSPORT_Y + 2.5);
+
 
     doc.text('Aantal kilometers', PAGE_MARGIN_LEFT + 80, TRANSPORT_Y + 2.5);
     doc.text(formData.get('kilometers') || '', PAGE_MARGIN_LEFT + 110, TRANSPORT_Y + 2.5);
@@ -226,5 +229,4 @@ function generatePDF(formData) {
     const naam = formData.get('naam') || 'Uren';
 
     doc.save(`Urendeclaratie_Week${weeknr}_${jaar}_${naam}.pdf`);
-    alert('PDF succesvol gegenereerd!');
 }

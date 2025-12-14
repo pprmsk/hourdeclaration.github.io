@@ -9,6 +9,16 @@
 </head>
 
 <body>
+
+    <div id="password-overlay">
+        <div id="password-box">
+            <h2>Beveiligde toegang</h2>
+            <input type="password" id="password-input" placeholder="Wachtwoord">
+            <button id="password-button">Verifieer</button>
+            <p id="password-error"></p>
+        </div>
+    </div>
+
     <div class="container">
         <h1>Uren Declaratie</h1>
 
@@ -43,11 +53,11 @@
                 </div>
                 <div>
                     <label>Naam:</label>
-                    <input type="text" name="naam">
+                    <input type="text" name="naam" value="Iman Soeteman">
                 </div>
                 <div>
                     <label>Woonplaats:</label>
-                    <input type="text" name="woonplaats">
+                    <input type="text" name="woonplaats" value="Hilversum">
                 </div>
             </div>
 
@@ -143,21 +153,20 @@
                 <textarea name="opmerkingen" rows="3"></textarea>
 
                 <div class="transport">
-                    <label><input type="checkbox" name="bedrijfsauto" checked> Bedrijfsauto</label>
-                    <label><input type="checkbox" name="eigenvervoer"> Eigen vervoer</label>
+                    <label><input type="radio" name="transport" checked> Bedrijfsauto</label>
+                    <label><input type="radio" name="transport"> Eigen vervoer</label>
                     <label>Aantal kilometers: <input type="number" name="kilometers"></label>
                 </div>
 
                 <div class="approvals">
                     <div>
-                        <label>Akkoord medewerker:</label><br>
+                        <label>Handtekening:</label><br>
                         <canvas id="signature-employee" width="400" height="150"
                             style="border:1px solid #000;"></canvas><br>
-                        <button type="button" onclick="clearSignature('employee')">Clear</button>
+                        <button type="button" onclick="clearSignature('employee')">Verwijder Handtekening</button>
                         <input type="hidden" name="akkoord_medewerker" id="signature-employee-input">
                     </div>
                 </div>
-
 
                 <div class="plaatswerk">
                     <label>Plaats van het werk: <input type="text" name="plaatswerk" value="Gooi en omstreken"></label>
@@ -172,6 +181,7 @@
     <script src="scripts/app.js"></script>
     <script src="scripts/form.js"></script>
     <script src="scripts/autofill.js"></script>
+    <script src="scripts/password.js"></script>
 </body>
 
 </html>

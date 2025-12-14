@@ -17,13 +17,13 @@ function setupHourCalculations() {
                 regular = (eh + em / 60) - (sh + sm / 60);
                 if (regular < 0) regular = 0; // prevent negative hours
             }
-            regularTd.textContent = regular.toFixed(2);
+            regularTd.textContent = regular.toFixed(1);
 
             const overtime = parseFloat(overtimeInput.value) || 0;
             const breakHours = parseFloat(breakInput.value) || 0;
             let total = regular + overtime - breakHours;
             if (total < 0) total = 0;
-            totalTd.textContent = total.toFixed(2);
+            totalTd.textContent = total.toFixed(1);
         }
 
         [startInput, endInput, overtimeInput, breakInput].forEach(input => {
