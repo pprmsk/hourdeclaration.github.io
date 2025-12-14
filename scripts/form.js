@@ -1,3 +1,40 @@
+const PAGE_MARGIN_LEFT = 20;
+const PAGE_MARGIN_TOP = 10;
+
+const TITLE_Y = PAGE_MARGIN_TOP;
+
+const HEADER_START_Y = PAGE_MARGIN_TOP + 15;
+const HEADER_LINE_HEIGHT = 7;
+const HEADER_VALUE_X = 70;
+
+const INFO_BOX_X = 150;
+const INFO_BOX_Y = HEADER_START_Y - 5;
+const INFO_BOX_WIDTH = 90;
+const INFO_BOX_HEIGHT = 30;
+const INFO_BOX_COLUMN_SPLIT = 45;
+const INFO_BOX_ROW_HEIGHT = 7.5;
+
+const TABLE_START_Y = INFO_BOX_Y + INFO_BOX_HEIGHT + 10;
+const TABLE_ROW_HEIGHT = 8;
+const TABLE_TOTAL_ROWS = 9;
+const TABLE_LEFT_X = PAGE_MARGIN_LEFT;
+const TABLE_WIDTH = 250;
+
+const COL_DAY = 20;
+const COL_DATE = 50;
+const COL_START = 90;
+const COL_END = 120;
+const COL_REGULAR = 150;
+const COL_OVERTIME = 175;
+const COL_BREAK = 200;
+const COL_TOTAL = 220;
+
+const AFTER_TABLE_MARGIN = 10;
+const CHECKBOX_SIZE = 3;
+const SIGNATURE_OFFSET_Y = 28;
+
+const FOOTER_Y = 280;
+
 function submitForm() {
     if (saveClientSignature) saveClientSignature();
     if (saveEmployeeSignature) saveEmployeeSignature();
@@ -8,12 +45,22 @@ function submitForm() {
     generatePDF(formData);
 }
 
-function generatePDF(formData) {
-    if (typeof jspdf === 'undefined') {
-        alert('PDF library niet geladen. Voeg jsPDF toe aan de pagina.');
-        return;
-    }
+function parseHours(value) {
+    if (!value) return 0;
+    return parseFloat(value.replace(',', '.')) || 0;
+}
 
+function getRegularHoursFromTable(dayPrefix) {
+    const row = document.querySelector(`tr[data-day="${dayPrefix}"]`);
+    if (!row) return 0;
+
+    const td = row.querySelector('.regular-hours');
+    if (!td) return 0;
+
+    return parseFloat(td.textContent.replace(',', '.')) || 0;
+}
+
+function generatePDF(formData) {
     const { jsPDF } = jspdf;
     const doc = new jsPDF({
         orientation: 'landscape',
@@ -22,68 +69,67 @@ function generatePDF(formData) {
     });
 
     doc.setFontSize(16);
-    doc.text('Urendeclaratie', 150, 20);
+    doc.text('Urendeclaratie', PAGE_MARGIN_LEFT, TITLE_Y);
 
     doc.setFontSize(10);
-    doc.text('Opdrachtgever', 20, 35);
-    doc.text(formData.get('opdrachtgever') || '', 70, 35);
-    doc.text('Werkadres', 20, 42);
-    doc.text(formData.get('werkadres') || '', 70, 42);
-    doc.text('PC + Plaats', 20, 49);
-    doc.text(formData.get('pcplaats') || '', 70, 49);
-    doc.text('Afdeling', 20, 56);
-    doc.text(formData.get('afdeling') || '', 70, 56);
+    doc.text('Opdrachtgever', PAGE_MARGIN_LEFT, HEADER_START_Y);
+    doc.text(formData.get('opdrachtgever') || '', HEADER_VALUE_X, HEADER_START_Y);
 
-    doc.rect(140, 30, 60, 30);
-    doc.line(140, 37, 200, 37);
-    doc.line(140, 44, 200, 44);
-    doc.line(140, 51, 200, 51);
-    doc.line(175, 30, 175, 60);
+    doc.text('Werkadres', PAGE_MARGIN_LEFT, HEADER_START_Y + HEADER_LINE_HEIGHT);
+    doc.text(formData.get('werkadres') || '', HEADER_VALUE_X, HEADER_START_Y + HEADER_LINE_HEIGHT);
 
-    doc.text('Weeknummer', 142, 35);
-    doc.text('Jaar', 142, 42);
-    doc.text('Naam', 142, 49);
-    doc.text('Woonplaats', 142, 56);
+    doc.text('PC + Plaats', PAGE_MARGIN_LEFT, HEADER_START_Y + HEADER_LINE_HEIGHT * 2);
+    doc.text(formData.get('pcplaats') || '', HEADER_VALUE_X, HEADER_START_Y + HEADER_LINE_HEIGHT * 2);
 
-    doc.text(formData.get('weeknummer') || '', 177, 35);
-    doc.text(formData.get('jaar') || '', 177, 42);
-    doc.text(formData.get('naam') || '', 177, 49);
-    doc.text(formData.get('woonplaats') || '', 177, 56);
+    doc.text('Afdeling', PAGE_MARGIN_LEFT, HEADER_START_Y + HEADER_LINE_HEIGHT * 3);
+    doc.text(formData.get('afdeling') || '', HEADER_VALUE_X, HEADER_START_Y + HEADER_LINE_HEIGHT * 3);
 
-    const tableStartY = 70;
-    const rowHeight = 8;
+    doc.rect(INFO_BOX_X, INFO_BOX_Y, INFO_BOX_WIDTH, INFO_BOX_HEIGHT);
 
-    const col1 = 20;   // Dag
-    const col2 = 50;   // Datum
-    const col3 = 90;   // Start Tijd
-    const col4 = 120;  // Eind Tijd
-    const col5 = 150;  // N.U.
-    const col6 = 175;  // O.W.
-    const col7 = 200;  // Pauze
-    const col8 = 220;  // Totaal gewerkte uren (wider)
+    doc.line(INFO_BOX_X, INFO_BOX_Y + INFO_BOX_ROW_HEIGHT, INFO_BOX_X + INFO_BOX_WIDTH, INFO_BOX_Y + INFO_BOX_ROW_HEIGHT);
+    doc.line(INFO_BOX_X, INFO_BOX_Y + INFO_BOX_ROW_HEIGHT * 2, INFO_BOX_X + INFO_BOX_WIDTH, INFO_BOX_Y + INFO_BOX_ROW_HEIGHT * 2);
+    doc.line(INFO_BOX_X, INFO_BOX_Y + INFO_BOX_ROW_HEIGHT * 3, INFO_BOX_X + INFO_BOX_WIDTH, INFO_BOX_Y + INFO_BOX_ROW_HEIGHT * 3);
 
-    doc.rect(20, tableStartY, 250, rowHeight * 10); // table width increased
+    doc.line(
+        INFO_BOX_X + INFO_BOX_COLUMN_SPLIT,
+        INFO_BOX_Y,
+        INFO_BOX_X + INFO_BOX_COLUMN_SPLIT,
+        INFO_BOX_Y + INFO_BOX_HEIGHT
+    );
 
-    doc.line(col2, tableStartY, col2, tableStartY + rowHeight * 10);
-    doc.line(col3, tableStartY, col3, tableStartY + rowHeight * 10);
-    doc.line(col4, tableStartY, col4, tableStartY + rowHeight * 10);
-    doc.line(col5, tableStartY, col5, tableStartY + rowHeight * 10);
-    doc.line(col6, tableStartY, col6, tableStartY + rowHeight * 10);
-    doc.line(col7, tableStartY, col7, tableStartY + rowHeight * 10);
-    doc.line(col8, tableStartY, col8, tableStartY + rowHeight * 10);
+    doc.text('Weeknummer', INFO_BOX_X + 2, INFO_BOX_Y + 5);
+    doc.text('Jaar', INFO_BOX_X + 2, INFO_BOX_Y + 5 + INFO_BOX_ROW_HEIGHT);
+    doc.text('Naam', INFO_BOX_X + 2, INFO_BOX_Y + 5 + INFO_BOX_ROW_HEIGHT * 2);
+    doc.text('Woonplaats', INFO_BOX_X + 2, INFO_BOX_Y + 5 + INFO_BOX_ROW_HEIGHT * 3);
 
-    for (let i = 1; i <= 10; i++) {
-        doc.line(20, tableStartY + rowHeight * i, 270, tableStartY + rowHeight * i);
+    doc.text(formData.get('weeknummer') || '', INFO_BOX_X + INFO_BOX_COLUMN_SPLIT + 2, INFO_BOX_Y + 5);
+    doc.text(formData.get('jaar') || '', INFO_BOX_X + INFO_BOX_COLUMN_SPLIT + 2, INFO_BOX_Y + 5 + INFO_BOX_ROW_HEIGHT);
+    doc.text(formData.get('naam') || '', INFO_BOX_X + INFO_BOX_COLUMN_SPLIT + 2, INFO_BOX_Y + 5 + INFO_BOX_ROW_HEIGHT * 2);
+    doc.text(formData.get('woonplaats') || '', INFO_BOX_X + INFO_BOX_COLUMN_SPLIT + 2, INFO_BOX_Y + 5 + INFO_BOX_ROW_HEIGHT * 3);
+
+    doc.rect(TABLE_LEFT_X, TABLE_START_Y, TABLE_WIDTH, TABLE_ROW_HEIGHT * TABLE_TOTAL_ROWS);
+
+    [COL_DATE, COL_START, COL_END, COL_REGULAR, COL_OVERTIME, COL_BREAK, COL_TOTAL].forEach(colX => {
+        doc.line(colX, TABLE_START_Y, colX, TABLE_START_Y + TABLE_ROW_HEIGHT * TABLE_TOTAL_ROWS);
+    });
+
+    for (let i = 1; i <= TABLE_TOTAL_ROWS; i++) {
+        doc.line(
+            TABLE_LEFT_X,
+            TABLE_START_Y + TABLE_ROW_HEIGHT * i,
+            TABLE_LEFT_X + TABLE_WIDTH,
+            TABLE_START_Y + TABLE_ROW_HEIGHT * i
+        );
     }
 
     doc.setFontSize(8);
-    doc.text('DATUM', col2 + 2, tableStartY + 5);
-    doc.text('START TIJD', col3 + 2, tableStartY + 5);
-    doc.text('EIND TIJD', col4 + 2, tableStartY + 5);
-    doc.text('N.U.', col5 + 2, tableStartY + 5);
-    doc.text('O.W.', col6 + 2, tableStartY + 5);
-    doc.text('PAUZE', col7 + 2, tableStartY + 5);
-    doc.text('TOTAAL GEWERKTE UREN', col8 + 2, tableStartY + 5);
+    doc.text('DATUM', COL_DATE + 2, TABLE_START_Y + 5);
+    doc.text('START TIJD', COL_START + 2, TABLE_START_Y + 5);
+    doc.text('EIND TIJD', COL_END + 2, TABLE_START_Y + 5);
+    doc.text('N.U.', COL_REGULAR + 2, TABLE_START_Y + 5);
+    doc.text('O.W.', COL_OVERTIME + 2, TABLE_START_Y + 5);
+    doc.text('PAUZE', COL_BREAK + 2, TABLE_START_Y + 5);
+    doc.text('TOTAAL GEWERKTE UREN', COL_TOTAL + 2, TABLE_START_Y + 5);
 
     const days = [
         { name: 'MAANDAG', prefix: 'monday' },
@@ -95,58 +141,90 @@ function generatePDF(formData) {
         { name: 'ZONDAG', prefix: 'sunday' }
     ];
 
-    days.forEach((day, index) => {
-        const y = tableStartY + rowHeight * (index + 1) + 5;
-        doc.text(day.name, col1 + 2, y);
+    let totalHoursWorked = 0;
 
-        if (day.prefix) {
-            doc.text(formData.get(`${day.prefix}_date`) || '', col2 + 2, y);
-            doc.text(formData.get(`${day.prefix}_start`) || '', col3 + 2, y);
-            doc.text(formData.get(`${day.prefix}_end`) || '', col4 + 2, y);
-            doc.text(formData.get(`${day.prefix}_regular`) || '', col5 + 2, y);
-            doc.text(formData.get(`${day.prefix}_overtime`) || '', col6 + 2, y);
-            doc.text(formData.get(`${day.prefix}_break`) || '', col7 + 2, y);
-            doc.text(formData.get(`${day.prefix}_total`) || '', col8 + 2, y);
-        }
+    days.forEach((day, index) => {
+        const y = TABLE_START_Y + TABLE_ROW_HEIGHT * (index + 1) + 5;
+
+        doc.text(day.name, COL_DAY + 2, y);
+
+        const regular = getRegularHoursFromTable(day.prefix);
+        const overtime = parseHours(formData.get(`${day.prefix}_overtime`));
+        const pause = parseHours(formData.get(`${day.prefix}_break`));
+        const total = Math.max(0, regular + overtime - pause);
+
+        totalHoursWorked += total;
+
+        doc.text(formData.get(`${day.prefix}_date`) || '', COL_DATE + 2, y);
+        doc.text(formData.get(`${day.prefix}_start`) || '', COL_START + 2, y);
+        doc.text(formData.get(`${day.prefix}_end`) || '', COL_END + 2, y);
+
+        doc.text(regular ? regular.toFixed(1) : '', COL_REGULAR + 2, y);
+        doc.text(overtime ? overtime.toFixed(1) : '', COL_OVERTIME + 2, y);
+        doc.text(pause ? pause.toFixed(1) : '', COL_BREAK + 2, y);
+        doc.text(total ? total.toFixed(1) : '', COL_TOTAL + 2, y);
     });
 
-    const bottomY = tableStartY + rowHeight * 10 + 10;
+    const totalRowY = TABLE_START_Y + TABLE_ROW_HEIGHT * (TABLE_TOTAL_ROWS - 1) + 5;
+    doc.setFontSize(9);
+    doc.text('TOTAAL', COL_DAY + 2, totalRowY);
 
-    doc.rect(20, bottomY, 3, 3);
-    if (formData.get('bedrijfsauto')) doc.text('X', 21, bottomY + 2.5);
-    doc.text('Bedrijfsauto', 25, bottomY + 2.5);
+    doc.text(
+        totalHoursWorked ? totalHoursWorked.toFixed(1) : '',
+        COL_TOTAL + 2,
+        totalRowY
+    );
 
-    doc.rect(55, bottomY, 3, 3);
-    if (formData.get('eigenvervoer')) doc.text('X', 56, bottomY + 2.5);
-    doc.text('Eigen vervoer', 60, bottomY + 2.5);
+    const BOTTOM_SECTION_Y = TABLE_START_Y + TABLE_ROW_HEIGHT * TABLE_TOTAL_ROWS + AFTER_TABLE_MARGIN;
 
-    doc.text('Aantal kilometers', 100, bottomY + 2.5);
-    doc.text(formData.get('kilometers') || '', 130, bottomY + 2.5);
+    doc.setFontSize(9);
+    doc.text(
+        `Opmerkingen: ${formData.get('opmerkingen') || ''}`,
+        PAGE_MARGIN_LEFT,
+        BOTTOM_SECTION_Y,
+        { maxWidth: TABLE_WIDTH }
+    );
 
-    doc.text('Plaats van het werk:', 20, bottomY + 10);
-    doc.text(formData.get('plaatswerk') || '', 60, bottomY + 10);
+    const TRANSPORT_Y = BOTTOM_SECTION_Y + 5;
 
-    const sigY = bottomY + 20;
-    doc.text('Akkoord opdrachtgever', 20, sigY);
-    doc.text('Akkoord medewerker', 120, sigY);
+    doc.rect(PAGE_MARGIN_LEFT, TRANSPORT_Y, CHECKBOX_SIZE, CHECKBOX_SIZE);
+    if (formData.get('bedrijfsauto')) doc.text('X', PAGE_MARGIN_LEFT + 1, TRANSPORT_Y + 2.5);
+    doc.text('Bedrijfsauto', PAGE_MARGIN_LEFT + 5, TRANSPORT_Y + 2.5);
+
+    doc.rect(PAGE_MARGIN_LEFT + 35, TRANSPORT_Y, CHECKBOX_SIZE, CHECKBOX_SIZE);
+    if (formData.get('eigenvervoer')) doc.text('X', PAGE_MARGIN_LEFT + 36, TRANSPORT_Y + 2.5);
+    doc.text('Eigen vervoer', PAGE_MARGIN_LEFT + 40, TRANSPORT_Y + 2.5);
+
+    doc.text('Aantal kilometers', PAGE_MARGIN_LEFT + 80, TRANSPORT_Y + 2.5);
+    doc.text(formData.get('kilometers') || '', PAGE_MARGIN_LEFT + 110, TRANSPORT_Y + 2.5);
+
+    doc.text('Plaats van het werk:', PAGE_MARGIN_LEFT, TRANSPORT_Y + 10);
+    doc.text(formData.get('plaatswerk') || '', PAGE_MARGIN_LEFT + 40, TRANSPORT_Y + 10);
+
+    const SIGNATURE_Y = BOTTOM_SECTION_Y + SIGNATURE_OFFSET_Y;
+
+    doc.text('Akkoord opdrachtgever', PAGE_MARGIN_LEFT, SIGNATURE_Y);
+    doc.text('Akkoord medewerker', PAGE_MARGIN_LEFT + 100, SIGNATURE_Y);
 
     const clientSig = formData.get('akkoord_opdrachtgever');
     const employeeSig = formData.get('akkoord_medewerker');
 
     if (clientSig && clientSig.startsWith('data:image')) {
-        try { doc.addImage(clientSig, 'PNG', 20, sigY + 2, 60, 20); } catch (e) { console.error(e); }
+        doc.addImage(clientSig, 'PNG', PAGE_MARGIN_LEFT, SIGNATURE_Y + 2, 60, 20);
     }
+
     if (employeeSig && employeeSig.startsWith('data:image')) {
-        try { doc.addImage(employeeSig, 'PNG', 120, sigY + 2, 60, 20); } catch (e) { console.error(e); }
+        doc.addImage(employeeSig, 'PNG', PAGE_MARGIN_LEFT + 100, SIGNATURE_Y + 2, 60, 20);
     }
 
     doc.setFontSize(7);
-    doc.text('N.U. = normale uren', 20, 280);
-    doc.text('O.W. = overwerken', 80, 280);
+    doc.text('N.U. = normale uren', PAGE_MARGIN_LEFT, FOOTER_Y);
+    doc.text('O.W. = overwerken', PAGE_MARGIN_LEFT + 60, FOOTER_Y);
 
     const weeknr = formData.get('weeknummer') || 'XX';
     const jaar = formData.get('jaar') || '2025';
     const naam = formData.get('naam') || 'Uren';
+
     doc.save(`Urendeclaratie_Week${weeknr}_${jaar}_${naam}.pdf`);
     alert('PDF succesvol gegenereerd!');
 }

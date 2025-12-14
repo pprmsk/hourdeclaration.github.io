@@ -34,7 +34,7 @@ function setupHourCalculations() {
 
 setupHourCalculations();
 
-function fillOutDaysBasedOnMondayDate() {
+function fillOutInfoBasedOnMondayDate() {
     const mondayDateInput = document.getElementById('monday_date');
     const dayOffsets = {
         'tuesday_date': 1,
@@ -58,6 +58,24 @@ function fillOutDaysBasedOnMondayDate() {
             document.getElementById(inputId).value = `${date.getFullYear()}-${month}-${day}`;
         }
     });
+
+    updateWeekNumber();
 }
 
-fillOutDaysBasedOnMondayDate();
+fillOutInfoBasedOnMondayDate();
+
+function updateWeekNumber() {
+    const mondayDateInput = document.getElementById('monday_date');
+    const weekNumberInput = document.getElementById('week_number');
+    mondayDateInput.addEventListener('change', () => {
+        const date = new Date(mondayDateInput.value);
+        if (isNaN(date)) {
+            weekNumberInput.value = '';
+            return;
+        }
+        const firstJan = new Date(date.getFullYear(), 0, 1);
+        const days = Math.floor((date - firstJan) / (24 * 60 * 60 * 1000));
+        const weekNumber = Math.ceil((days + firstJan.getDay() + 1) / 7);
+        weekNumberInput.value = weekNumber;
+    });
+}
