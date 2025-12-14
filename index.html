@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uren Declaratie</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Uren Declaratie</h1>
+
+        <form id="hourForm">
+            <div class="top-section">
+                <div>
+                    <label>Opdrachtgever:</label>
+                    <input type="text" name="opdrachtgever" value="Bekenkamp de Woonspecialist Hilversum">
+                </div>
+                <div>
+                    <label>Werkadres:</label>
+                    <input type="text" name="werkadres" value="Nieuwe Havenweg 5, 1216 BG Hilversum">
+                </div>
+                <div>
+                    <label>PC + Plaats:</label>
+                    <input type="text" name="pcplaats" value="N.v.t.">
+                </div>
+                <div>
+                    <label>Afdeling:</label>
+                    <input type="text" name="afdeling" value="Stoffeerders">
+                </div>
+            </div>
+
+            <div class="week-info">
+                <div>
+                    <label>Weeknummer:</label>
+                    <input type="number" name="weeknummer">
+                </div>
+                <div>
+                    <label>Jaar:</label>
+                    <input type="number" name="jaar" value="2025">
+                </div>
+                <div>
+                    <label>Naam:</label>
+                    <input type="text" name="naam">
+                </div>
+                <div>
+                    <label>Woonplaats:</label>
+                    <input type="text" name="woonplaats">
+                </div>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Dag</th>
+                        <th>Datum</th>
+                        <th>Werktijden van tot</th>
+                        <th>N.U.</th>
+                        <th>O.W.</th>
+                        <th>Pauze</th>
+                        <th>Totaal gewerkte uren</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Maandag</td>
+                        <td><input type="date" name="monday_date"></td>
+                        <td><input type="text" name="monday_workhours"></td>
+                        <td><input type="number" name="monday_regular"></td>
+                        <td><input type="number" name="monday_overtime"></td>
+                        <td><input type="text" name="monday_break"></td>
+                        <td><input type="number" name="monday_total"></td>
+                    </tr>
+                    <tr>
+                        <td>Dinsdag</td>
+                        <td><input type="date" name="tuesday_date"></td>
+                        <td><input type="text" name="tuesday_workhours"></td>
+                        <td><input type="number" name="tuesday_regular"></td>
+                        <td><input type="number" name="tuesday_overtime"></td>
+                        <td><input type="text" name="tuesday_break"></td>
+                        <td><input type="number" name="tuesday_total"></td>
+                    </tr>
+                    <tr>
+                        <td>Woensdag</td>
+                        <td><input type="date" name="wednesday_date"></td>
+                        <td><input type="text" name="wednesday_workhours"></td>
+                        <td><input type="number" name="wednesday_regular"></td>
+                        <td><input type="number" name="wednesday_overtime"></td>
+                        <td><input type="text" name="wednesday_break"></td>
+                        <td><input type="number" name="wednesday_total"></td>
+                    </tr>
+                    <tr>
+                        <td>Donderdag</td>
+                        <td><input type="date" name="thursday_date"></td>
+                        <td><input type="text" name="thursday_workhours"></td>
+                        <td><input type="number" name="thursday_regular"></td>
+                        <td><input type="number" name="thursday_overtime"></td>
+                        <td><input type="text" name="thursday_break"></td>
+                        <td><input type="number" name="thursday_total"></td>
+                    </tr>
+                    <tr>
+                        <td>Vrijdag</td>
+                        <td><input type="date" name="friday_date"></td>
+                        <td><input type="text" name="friday_workhours"></td>
+                        <td><input type="number" name="friday_regular"></td>
+                        <td><input type="number" name="friday_overtime"></td>
+                        <td><input type="text" name="friday_break"></td>
+                        <td><input type="number" name="friday_total"></td>
+                    </tr>
+                    <tr>
+                        <td>Zaterdag</td>
+                        <td><input type="date" name="saturday_date"></td>
+                        <td><input type="text" name="saturday_workhours"></td>
+                        <td><input type="number" name="saturday_regular"></td>
+                        <td><input type="number" name="saturday_overtime"></td>
+                        <td><input type="text" name="saturday_break"></td>
+                        <td><input type="number" name="saturday_total"></td>
+                    </tr>
+                    <tr>
+                        <td>Zondag</td>
+                        <td><input type="date" name="sunday_date"></td>
+                        <td><input type="text" name="sunday_workhours"></td>
+                        <td><input type="number" name="sunday_regular"></td>
+                        <td><input type="number" name="sunday_overtime"></td>
+                        <td><input type="text" name="sunday_break"></td>
+                        <td><input type="number" name="sunday_total"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+            <div class="bottom-section">
+                <label>Opmerkingen:</label>
+                <textarea name="opmerkingen" rows="3"></textarea>
+
+                <div class="transport">
+                    <label><input type="checkbox" name="bedrijfsauto" checked> Bedrijfsauto</label>
+                    <label><input type="checkbox" name="eigenvervoer"> Eigen vervoer</label>
+                    <label>Aantal kilometers: <input type="number" name="kilometers"></label>
+                </div>
+
+                <div class="approvals">
+                    <div>
+                        <label>Akkoord opdrachtgever:</label><br>
+                        <canvas id="signature-client" width="400" height="150"
+                            style="border:1px solid #000;"></canvas><br>
+                        <button type="button" onclick="clearSignature('client')">Clear</button>
+                        <input type="hidden" name="akkoord_opdrachtgever" id="signature-client-input">
+                    </div>
+
+                    <div>
+                        <label>Akkoord medewerker:</label><br>
+                        <canvas id="signature-employee" width="400" height="150"
+                            style="border:1px solid #000;"></canvas><br>
+                        <button type="button" onclick="clearSignature('employee')">Clear</button>
+                        <input type="hidden" name="akkoord_medewerker" id="signature-employee-input">
+                    </div>
+                </div>
+
+
+                <div class="plaatswerk">
+                    <label>Plaats van het werk: <input type="text" name="plaatswerk" value="Gooi en omstreken"></label>
+                </div>
+
+                <button type="button" onclick="submitForm()">Opslaan als PDF</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="scripts/app.js"></script>
+    <script src="scripts/form.js"></script>
+</body>
+
+</html>
