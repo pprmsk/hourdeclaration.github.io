@@ -1,1 +1,1 @@
-# hourdeclaration.github.io
+# [Hour Declaration](https://pprmsk.github.io/hourdeclaration.github.io/)
