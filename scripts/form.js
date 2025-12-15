@@ -30,6 +30,24 @@ const FOOTER_Y = 280;
 
 let employeeSignatureDataUrl = null;
 
+window.addEventListener('DOMContentLoaded', () => {
+    const pdfButton = document.getElementById('pdfButton');
+    const sigInput = document.getElementById('employeeSig');
+    const weekInput = document.getElementById('week_number');
+
+    pdfButton.addEventListener('click', () => {
+        if (!sigInput.value) {
+            alert('Upload een handtekening voordat je de PDF genereert');
+            return;
+        }
+        if (!weekInput.value) {
+            alert('Vul een weeknummer in of genereer er een door Maandag in te vullen');
+            return;
+        }
+        submitForm();
+    });
+});
+
 document.getElementById('employeeSig').addEventListener('change', e => {
     const file = e.target.files[0];
     if (!file) return;
