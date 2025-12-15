@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <title>Uren Declaratie</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -45,7 +46,7 @@
             <div class="week-info">
                 <div>
                     <label>Weeknummer:</label>
-                    <input type="number" id="week_number" name="weeknummer">
+                    <input type="number" id="week_number" name="weeknummer" required>
                 </div>
                 <div>
                     <label>Jaar:</label>
@@ -67,83 +68,104 @@
                         <th>Dag</th>
                         <th>Datum</th>
                         <th>Start tijd</th>
-                        <th>Eind tijd</th>
+                        <th>UREN</th>
                         <th>N.U.</th>
                         <th>O.W.</th>
                         <th>Pauze (uur)</th>
                         <th>Totaal gewerkte uren</th>
+                        <th>CLEAR</th>
                     </tr>
                 </thead>
                 <tbody>
+                    <!-- Monday -->
                     <tr data-day="monday">
                         <td>Maandag</td>
                         <td><input type="date" id="monday_date" name="monday_date"></td>
                         <td><input type="time" name="monday_start"></td>
-                        <td><input type="time" name="monday_end"></td>
+                        <td><input type="number" name="monday_hours" step="0.5" min="0"></td>
                         <td class="regular-hours">0</td>
-                        <td><input type="number" name="monday_overtime" step="0.25" min="0"></td>
-                        <td><input type="number" name="monday_break" step="0.25" min="0" value="0"></td>
+                        <td><input type="number" name="monday_overtime" step="0.5" min="0"></td>
+                        <td><input type="number" name="monday_break" step="0.5" min="0" value="0"></td>
                         <td class="total-hours">0</td>
+                        <td><button type="button" class="clear-row">Clear</button></td>
                     </tr>
+
+                    <!-- Tuesday -->
                     <tr data-day="tuesday">
                         <td>Dinsdag</td>
                         <td><input type="date" id="tuesday_date" name="tuesday_date"></td>
                         <td><input type="time" name="tuesday_start"></td>
-                        <td><input type="time" name="tuesday_end"></td>
+                        <td><input type="number" name="tuesday_hours" step="0.5" min="0"></td>
                         <td class="regular-hours">0</td>
-                        <td><input type="number" name="tuesday_overtime" step="0.25" min="0"></td>
-                        <td><input type="number" name="tuesday_break" step="0.25" min="0" value="0"></td>
+                        <td><input type="number" name="tuesday_overtime" step="0.5" min="0"></td>
+                        <td><input type="number" name="tuesday_break" step="0.5" min="0" value="0"></td>
                         <td class="total-hours">0</td>
+                        <td><button type="button" class="clear-row">Clear</button></td>
                     </tr>
+
+                    <!-- Wednesday -->
                     <tr data-day="wednesday">
                         <td>Woensdag</td>
                         <td><input type="date" id="wednesday_date" name="wednesday_date"></td>
                         <td><input type="time" name="wednesday_start"></td>
-                        <td><input type="time" name="wednesday_end"></td>
+                        <td><input type="number" name="wednesday_hours" step="0.5" min="0"></td>
                         <td class="regular-hours">0</td>
-                        <td><input type="number" name="wednesday_overtime" step="0.25" min="0"></td>
-                        <td><input type="number" name="wednesday_break" step="0.25" min="0" value="0"></td>
+                        <td><input type="number" name="wednesday_overtime" step="0.5" min="0"></td>
+                        <td><input type="number" name="wednesday_break" step="0.5" min="0" value="0"></td>
                         <td class="total-hours">0</td>
+                        <td><button type="button" class="clear-row">Clear</button></td>
                     </tr>
+
+                    <!-- Thursday -->
                     <tr data-day="thursday">
                         <td>Donderdag</td>
                         <td><input type="date" id="thursday_date" name="thursday_date"></td>
                         <td><input type="time" name="thursday_start"></td>
-                        <td><input type="time" name="thursday_end"></td>
+                        <td><input type="number" name="thursday_hours" step="0.5" min="0"></td>
                         <td class="regular-hours">0</td>
-                        <td><input type="number" name="thursday_overtime" step="0.25" min="0"></td>
-                        <td><input type="number" name="thursday_break" step="0.25" min="0" value="0"></td>
+                        <td><input type="number" name="thursday_overtime" step="0.5" min="0"></td>
+                        <td><input type="number" name="thursday_break" step="0.5" min="0" value="0"></td>
                         <td class="total-hours">0</td>
+                        <td><button type="button" class="clear-row">Clear</button></td>
                     </tr>
+
+                    <!-- Friday -->
                     <tr data-day="friday">
                         <td>Vrijdag</td>
                         <td><input type="date" id="friday_date" name="friday_date"></td>
                         <td><input type="time" name="friday_start"></td>
-                        <td><input type="time" name="friday_end"></td>
+                        <td><input type="number" name="friday_hours" step="0.5" min="0"></td>
                         <td class="regular-hours">0</td>
-                        <td><input type="number" name="friday_overtime" step="0.25" min="0"></td>
-                        <td><input type="number" name="friday_break" step="0.25" min="0" value="0"></td>
+                        <td><input type="number" name="friday_overtime" step="0.5" min="0"></td>
+                        <td><input type="number" name="friday_break" step="0.5" min="0" value="0"></td>
                         <td class="total-hours">0</td>
+                        <td><button type="button" class="clear-row">Clear</button></td>
                     </tr>
+
+                    <!-- Saturday -->
                     <tr data-day="saturday">
                         <td>Zaterdag</td>
                         <td><input type="date" id="saturday_date" name="saturday_date"></td>
                         <td><input type="time" name="saturday_start"></td>
-                        <td><input type="time" name="saturday_end"></td>
+                        <td><input type="number" name="saturday_hours" step="0.5" min="0"></td>
                         <td class="regular-hours">0</td>
-                        <td><input type="number" name="saturday_overtime" step="0.25" min="0"></td>
-                        <td><input type="number" name="saturday_break" step="0.25" min="0"></td>
+                        <td><input type="number" name="saturday_overtime" step="0.5" min="0"></td>
+                        <td><input type="number" name="saturday_break" step="0.5" min="0"></td>
                         <td class="total-hours">0</td>
+                        <td><button type="button" class="clear-row">Clear</button></td>
                     </tr>
+
+                    <!-- Sunday -->
                     <tr data-day="sunday">
                         <td>Zondag</td>
                         <td><input type="date" id="sunday_date" name="sunday_date"></td>
                         <td><input type="time" name="sunday_start"></td>
-                        <td><input type="time" name="sunday_end"></td>
+                        <td><input type="number" name="sunday_hours" step="0.5" min="0"></td>
                         <td class="regular-hours">0</td>
-                        <td><input type="number" name="sunday_overtime" step="0.25" min="0"></td>
-                        <td><input type="number" name="sunday_break" step="0.25" min="0"></td>
+                        <td><input type="number" name="sunday_overtime" step="0.5" min="0"></td>
+                        <td><input type="number" name="sunday_break" step="0.5" min="0"></td>
                         <td class="total-hours">0</td>
+                        <td><button type="button" class="clear-row">Clear</button></td>
                     </tr>
                 </tbody>
             </table>
@@ -166,11 +188,8 @@
 
                 <div class="approvals">
                     <div>
-                        <label>Handtekening:</label><br>
-                        <canvas id="signature-employee" width="400" height="150"
-                            style="border:1px solid #000;"></canvas><br>
-                        <button type="button" onclick="clearSignature('employee')">Verwijder Handtekening</button>
-                        <input type="hidden" name="akkoord_medewerker" id="signature-employee-input">
+                        <label>Upload Handtekening (PNG):</label><br>
+                        <input type="file" id="employeeSig" name="akkoord_medewerker" accept="image/png">
                     </div>
                 </div>
 
@@ -178,16 +197,16 @@
                     <label>Plaats van het werk: <input type="text" name="plaatswerk" value="Gooi en omstreken"></label>
                 </div>
 
-                <button type="button" onclick="submitForm()">Opslaan als PDF</button>
+                <button type="button" id="pdfButton" onclick="submitForm()">Opslaan als PDF</button>
             </div>
         </form>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/date-fns@2.30.0/dist/date-fns.min.js"></script>
     <script src="scripts/app.js"></script>
     <script src="scripts/form.js"></script>
     <script src="scripts/autofill.js"></script>
     <script src="scripts/password.js"></script>
 </body>
-
 </html>
